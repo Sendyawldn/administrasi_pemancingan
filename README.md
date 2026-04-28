@@ -1,59 +1,141 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Administrasi Pemancingan
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Aplikasi **Administrasi Pemancingan** berbasis Laravel untuk membantu operasional tempat pemancingan: mengelola kolam/meja, mencatat transaksi pelanggan, menambahkan pesanan makanan/minuman, hingga membuat laporan pendapatan.
 
-## About Laravel
+## Fitur Utama
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- **Autentikasi pengguna** (login, register, verifikasi email, reset password).
+- **Dashboard operasional** untuk melihat meja dan transaksi berjalan.
+- **Manajemen meja/kolam** (CRUD meja + status tersedia/digunakan).
+- **Transaksi pemancingan**:
+  - Mulai sesi berdasarkan durasi.
+  - Selesaikan sesi dengan perhitungan ikan kecil & ikan babon.
+  - Batalkan atau hapus transaksi.
+  - Histori transaksi.
+- **Pesanan makanan/minuman** terhubung ke transaksi aktif.
+- **Manajemen produk** (makanan/minuman) termasuk upload gambar.
+- **Pengaturan akun** (profil, password, tema, foto profil).
+- **Laporan transaksi** dengan filter tanggal dan **cetak PDF**.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Teknologi
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- **Backend:** PHP 8.2+, Laravel 12
+- **Frontend assets:** Vite, Tailwind CSS, Alpine.js
+- **Database:** MySQL/PostgreSQL/SQLite (sesuai konfigurasi Laravel)
+- **Auth/API token:** Laravel Sanctum
 
-## Learning Laravel
+## Struktur Modul
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+- `app/Http/Controllers/MejaController.php` → modul meja/kolam.
+- `app/Http/Controllers/TransaksiController.php` → alur transaksi pemancingan, histori, laporan, cetak PDF.
+- `app/Http/Controllers/PesananMakananController.php` → pesanan produk pada transaksi.
+- `app/Http/Controllers/ProdukController.php` → CRUD produk makanan/minuman.
+- `app/Http/Controllers/SettingsController.php` → profil, password, tema, foto profil.
+- `routes/web.php` → routing utama aplikasi.
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## Persiapan Environment
 
-## Laravel Sponsors
+Pastikan sudah terpasang:
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+- PHP **8.2+**
+- Composer
+- Node.js + npm
+- Database server (opsional jika tidak memakai SQLite)
 
-### Premium Partners
+## Instalasi
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+### Opsi cepat (disarankan)
 
-## Contributing
+Jalankan script setup bawaan `composer.json`:
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+```bash
+composer run setup
+```
 
-## Code of Conduct
+Perintah ini akan:
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+1. Install dependency PHP.
+2. Membuat `.env` dari `.env.example` (jika belum ada).
+3. Generate app key.
+4. Menjalankan migrasi database.
+5. Install dependency frontend.
+6. Build aset frontend.
 
-## Security Vulnerabilities
+### Opsi manual
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+```bash
+composer install
+cp .env.example .env
+php artisan key:generate
+php artisan migrate
+npm install
+npm run build
+```
 
-## License
+## Menjalankan Aplikasi
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+### Mode development penuh (server + queue + log + vite)
+
+```bash
+composer run dev
+```
+
+### Atau jalankan terpisah
+
+```bash
+php artisan serve
+npm run dev
+```
+
+Aplikasi akan tersedia di:
+
+- `http://127.0.0.1:8000`
+
+## Akun & Data Awal
+
+Seeder tersedia di folder `database/seeders`. Jika ingin mengisi data awal:
+
+```bash
+php artisan db:seed
+```
+
+Atau reset sekaligus seed:
+
+```bash
+php artisan migrate:fresh --seed
+```
+
+## Pengujian
+
+Menjalankan test suite:
+
+```bash
+composer test
+```
+
+atau
+
+```bash
+php artisan test
+```
+
+## Catatan Penyimpanan File
+
+Aplikasi menggunakan disk `public` untuk upload (contoh: gambar produk, foto profil). Pastikan symbolic link storage sudah dibuat:
+
+```bash
+php artisan storage:link
+```
+
+## Ringkasan Route Penting
+
+- `/dashboard` → halaman utama operasional.
+- `/meja` → manajemen meja.
+- `/transaksi/*` → alur transaksi, histori, laporan, cetak.
+- `/produk` → manajemen produk.
+- `/pesanan/create/{transaksi_id}` → input pesanan makanan/minuman.
+- `/settings` → pengaturan profil, password, tema, foto.
+
+## Lisensi
+
+Project ini menggunakan lisensi [MIT](LICENSE).
